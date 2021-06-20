@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-
 import 'package:attendance_project/app/modules/home/bindings/home_binding.dart';
 import 'package:attendance_project/app/modules/home/views/home_view.dart';
 import 'package:attendance_project/app/modules/image_selector/bindings/image_selector_binding.dart';
@@ -21,5 +20,6 @@ class AppPages {
       page: () => ImageSelectorView(),
       binding: ImageSelectorBinding(),
     ),
+    
   ];
 }

@@ -1,3 +1,4 @@
+import 'package:attendance_project/app/modules/home/views/login.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -8,8 +9,9 @@ void main() {
   runApp(
     GetMaterialApp(
       title: "Application",
-      initialRoute: AppPages.INITIAL,
-      getPages: AppPages.routes,
+      // initialRoute: AppPages.INITIAL,
+      // getPages: AppPages.routes,
+      home: LoginPage(),
     ),
   );
 }
