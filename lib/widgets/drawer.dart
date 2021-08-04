@@ -1,3 +1,4 @@
+import 'package:attendance_project/app/modules/Attendence_record/view/attendence_view.dart';
 import 'package:attendance_project/app/modules/home/views/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,9 @@ Widget drawer() {
           ListTile(
             leading: new Icon(Icons.file_present),
             title: const Text('Records'),
-            onTap: () {},
+            onTap: () {
+              Get.to(AttendanceRecordView());
+            },
           ),
           ListTile(
             leading: Icon(Icons.logout),

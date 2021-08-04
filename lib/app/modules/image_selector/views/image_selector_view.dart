@@ -1,4 +1,5 @@
 import 'package:attendance_project/app/modules/image_selector/controllers/image_selector_controller.dart';
+import 'package:attendance_project/widgets/class_select_dialogbox.dart';
 import 'package:attendance_project/widgets/image_selector_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -106,7 +107,11 @@ class ImageSelectorView extends GetView {
                                 "Check attendance",
                                 style: TextStyle(color: Colors.white),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                classSelectDialogBox(
+                                  context
+                                );
+                              },
                             ),
                           ),
                         )
