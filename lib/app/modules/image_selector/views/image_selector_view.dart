@@ -1,5 +1,5 @@
+import 'package:attendance_project/app/modules/home/controllers/zipcontroller_controller.dart';
 import 'package:attendance_project/app/modules/image_selector/controllers/image_selector_controller.dart';
-import 'package:attendance_project/widgets/class_select_dialogbox.dart';
 import 'package:attendance_project/widgets/image_selector_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +9,7 @@ class ImageSelectorView extends GetView {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final ImageSelectorController imageSelectorController =
       Get.put(ImageSelectorController());
+  final ZipControllerController zipControllerController = Get.put(ZipControllerController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,7 +96,25 @@ class ImageSelectorView extends GetView {
                 height:50,
               ),
               GetBuilder<ImageSelectorController>(
-                  builder: (controller) => imageSelectorController.image != null
+                  builder: (controller) => imageSelectorController.imageList.length > 0
+                      ? Padding(
+                    padding: const EdgeInsets.fromLTRB(2.0,0.0,5.0,2),
+                    child: Center(
+                      child: Container(
+                        height: 20,
+
+
+                        child:imageSelectorController.imageList.length == 5? Text("5 photos are stored now zip to continue the process."): Text(
+                          "Take ${(5-imageSelectorController.imageList.length)} more photos",
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+
+                      ),
+                    ),
+                  )
+                      : SizedBox()),
+              GetBuilder<ImageSelectorController>(
+                  builder: (controller) => imageSelectorController.image != null && imageSelectorController.isPressed
                       ? Padding(
                           padding: const EdgeInsets.all(20.0),
                           child: Center(
@@ -104,17 +123,35 @@ class ImageSelectorView extends GetView {
                               minWidth: Get.width * 0.5,
                               color: Colors.blue,
                               child: Text(
-                                "Check attendance",
+                                "Add to list",
                                 style: TextStyle(color: Colors.white),
                               ),
                               onPressed: () {
-                                classSelectDialogBox(
-                                  context
-                                );
+                                imageSelectorController.addImageToList();
                               },
                             ),
                           ),
                         )
+                      : SizedBox()),
+              GetBuilder<ImageSelectorController>(
+                  builder: (controller) => imageSelectorController.imageList.length == 5
+                      ? Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Center(
+                      child: MaterialButton(
+                        height: Get.height * 0.06,
+                        minWidth: Get.width * 0.5,
+                        color: Colors.blue,
+                        child: Text(
+                          "Zip Images",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () {
+                          zipControllerController.test(imageList: imageSelectorController.imageList);
+                        },
+                      ),
+                    ),
+                  )
                       : SizedBox())
             ],
           ),

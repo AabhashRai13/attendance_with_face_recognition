@@ -16,14 +16,15 @@ class ImageSelectorController extends GetxController {
   final TextEditingController prescribedDateController =
       TextEditingController();
   bool prescriptionAdded = false;
-
+  final imageList = [];
   var selectedDate = "YY/MM/DD hr:sec".obs;
-
+ bool isPressed = false;
   Future<void> pickFromCamera() async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.camera);
 
     if (pickedFile != null) {
+      isPressed = true;
       image = File(pickedFile.path);
       update();
     } else {
@@ -36,6 +37,7 @@ class ImageSelectorController extends GetxController {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
+      isPressed = true;
       image = File(pickedFile.path);
       update();
     } else {
@@ -70,6 +72,14 @@ class ImageSelectorController extends GetxController {
 
   void deleteImage() {
     image = null;
+    update();
+  }
+
+  void addImageToList() async {
+    File compressedImage =
+        await testCompressAndGetFile(image, await targetPath());
+    imageList.add(compressedImage);
+    isPressed = false;
     update();
   }
 
