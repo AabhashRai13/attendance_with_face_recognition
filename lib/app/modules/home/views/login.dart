@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:attendance_project/app/modules/home/views/home_view.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   bool validate = false;
   String name1, password1;
   var _response;
+  bool isPasswordVisible = true;
 
   alertbox(String message) {
     return showDialog(
@@ -55,11 +58,11 @@ class _LoginPageState extends State<LoginPage> {
             Theme.of(context).primaryColor.withOpacity(0.5),
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-          child: Form(
-            key: _key,
-            child: Center(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+            child: Form(
+              key: _key,
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -67,14 +70,34 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: 50.0,
                     ),
+                    Text("Attendance System", style: TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.bold,color: Colors.blue
+                    ),),
+                    Container(
+                      height: 200,
+                      width: 200,
+                      child: SvgPicture.asset("assets/loading.svg",
+                      ),
+                    ),
+                    SizedBox(height: 50,),
                     TextFormField(
                       autofocus: true,
                       controller: name2,
                       decoration: InputDecoration(
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Icon(
+                              Icons.person,
+                              size: 30,
+                              color: Colors.blue,
+                            ),
+                          ),
                           border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue),
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                           enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue),
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                           errorBorder: OutlineInputBorder(
@@ -97,11 +120,41 @@ class _LoginPageState extends State<LoginPage> {
                     TextFormField(
                       autofocus: true,
                       controller: password2,
+                      obscureText: isPasswordVisible,
                       decoration: InputDecoration(
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Icon(
+                              Icons.lock,
+                              size: 30,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        suffixIcon: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: IconButton(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onPressed: (){
+                              setState(() {
+                                isPasswordVisible=!isPasswordVisible;
+  
+                              });
+                            },
+                            icon: Icon(
+                              isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
                           border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue),
+  
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                           enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue),
+  
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                           hintText: "Password"),
@@ -121,7 +174,8 @@ class _LoginPageState extends State<LoginPage> {
 
                     // ignore: deprecated_member_use
                     RaisedButton(
-                        color: Colors.green,
+                        color: Colors.blue,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                         child: showLoading
                             ? Center(
                                 child: CircularProgressIndicator(),
@@ -184,7 +238,7 @@ class _LoginPageState extends State<LoginPage> {
                           setState(() {
                             showLoading = false;
                           });
-                        })
+                        }),
                   ],
                 ),
               ),
