@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:attendance_project/api/api.dart';
-import 'package:attendance_project/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
@@ -13,21 +12,15 @@ import 'package:dio/dio.dart' as dio;
 class ImageSelectorController extends GetxController {
   File image;
 
-  final TextEditingController dateController = TextEditingController();
-  final TextEditingController prescribedByController = TextEditingController();
-  final TextEditingController prescriptionController = TextEditingController();
-  final TextEditingController prescribedDateController =
-      TextEditingController();
   bool imageUploaded = false;
   final imageList = [];
-  var selectedDate = "YY/MM/DD hr:sec".obs;
-  bool isPressed = false;
+
+  bool busy = false;
   Future<void> pickFromCamera() async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.camera);
 
     if (pickedFile != null) {
-      isPressed = true;
       image = File(pickedFile.path);
       update();
     } else {
@@ -40,20 +33,11 @@ class ImageSelectorController extends GetxController {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      isPressed = true;
       image = File(pickedFile.path);
       update();
     } else {
       print('No image selected.');
     }
-  }
-
-  final validatedUserList = <User>[];
-
-  void checkAttendanceList() {}
-  @override
-  void onInit() {
-    super.onInit();
   }
 
   //to get a target path to provide for compressed file location
@@ -83,11 +67,13 @@ class ImageSelectorController extends GetxController {
     File compressedImage =
         await testCompressAndGetFile(image, await targetPath());
     imageList.add(compressedImage);
-    isPressed = false;
+
     update();
   }
 
   void mapPrescriptionPressed() async {
+    busy = true;
+    update();
     File compressedImage =
         await testCompressAndGetFile(image, await targetPath());
 
@@ -98,6 +84,8 @@ class ImageSelectorController extends GetxController {
     });
 
     sendPrescription(formData);
+    busy = false;
+    update();
   }
 
   final Api api = Api();
@@ -110,6 +98,7 @@ class ImageSelectorController extends GetxController {
           backgroundColor: Colors.blueGrey[100],
           colorText: Colors.white,
           duration: Duration(seconds: 2));
+      image = null;
     }
   }
 
