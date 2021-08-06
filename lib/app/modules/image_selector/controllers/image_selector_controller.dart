@@ -1,11 +1,14 @@
 import 'dart:io';
 
+import 'package:attendance_project/api/api.dart';
+import 'package:attendance_project/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:dio/dio.dart' as dio;
 
 class ImageSelectorController extends GetxController {
   File image;
@@ -15,10 +18,10 @@ class ImageSelectorController extends GetxController {
   final TextEditingController prescriptionController = TextEditingController();
   final TextEditingController prescribedDateController =
       TextEditingController();
-  bool prescriptionAdded = false;
+  bool imageUploaded = false;
   final imageList = [];
   var selectedDate = "YY/MM/DD hr:sec".obs;
- bool isPressed = false;
+  bool isPressed = false;
   Future<void> pickFromCamera() async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.camera);
@@ -45,8 +48,9 @@ class ImageSelectorController extends GetxController {
     }
   }
 
-  final count = 0.obs;
+  final validatedUserList = <User>[];
 
+  void checkAttendanceList() {}
   @override
   void onInit() {
     super.onInit();
@@ -83,36 +87,31 @@ class ImageSelectorController extends GetxController {
     update();
   }
 
-  // void mapPrescriptionPressed() async {
-  //   // File compressedImage =
-  //   //     await testCompressAndGetFile(image, await targetPath());
+  void mapPrescriptionPressed() async {
+    File compressedImage =
+        await testCompressAndGetFile(image, await targetPath());
 
-  //   var formData = dio.FormData.fromMap({
-  //     // "image": await dio.MultipartFile.fromFile(
-  //     //   compressedImage.path,
-  //     // ),
-  //     "prescription": prescriptionController,
-  //     "prescribed_by": "Ram",
-  //     "uploaded_date": DateTime.now(),
-  //     "prescribed_date": "2021-04-15 5:17"
-  //   });
+    var formData = dio.FormData.fromMap({
+      "file": await dio.MultipartFile.fromFile(
+        compressedImage.path,
+      ),
+    });
 
-  //   sendPrescription(formData);
-  // }
+    sendPrescription(formData);
+  }
 
-  // Future sendPrescription(myProductCreateMap) async {
-  //   setState(ViewState.Busy);
-  //   prescriptionAdded =
-  //       await apiAuthProvider.postPrescription(myProductCreateMap);
-  //   setState(ViewState.Retrieved);
-  //   if (prescriptionAdded) {
-  //     Get.back();
-  //     Get.snackbar("Product created successfully!", "Success",
-  //         backgroundColor: Colors.blueGrey[100],
-  //         colorText: Colors.white,
-  //         duration: Duration(seconds: 2));
-  //   }
-  // }
+  final Api api = Api();
+  Future sendPrescription(myProductCreateMap) async {
+    imageUploaded = await api.postImage(myProductCreateMap);
+
+    if (imageUploaded) {
+      Get.back();
+      Get.snackbar("Image Uploaded successfully!", "Success",
+          backgroundColor: Colors.blueGrey[100],
+          colorText: Colors.white,
+          duration: Duration(seconds: 2));
+    }
+  }
 
   @override
   void onReady() {
@@ -121,6 +120,4 @@ class ImageSelectorController extends GetxController {
 
   @override
   void onClose() {}
-
-  void increment() => count.value++;
 }

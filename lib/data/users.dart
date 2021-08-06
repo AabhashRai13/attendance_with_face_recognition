@@ -1,4 +1,3 @@
-
 import 'package:attendance_project/model/user.dart';
 
 final allUsers = <User>[

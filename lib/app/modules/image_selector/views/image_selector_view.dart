@@ -9,7 +9,8 @@ class ImageSelectorView extends GetView {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final ImageSelectorController imageSelectorController =
       Get.put(ImageSelectorController());
-  final ZipControllerController zipControllerController = Get.put(ZipControllerController());
+  final ZipControllerController zipControllerController =
+      Get.put(ZipControllerController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,17 +40,19 @@ class ImageSelectorView extends GetView {
                         height: Get.height * 0.4,
                         width: Get.width * 0.9,
                         child: imageSelectorController.image != null
-                            ?   Align(
-                                    alignment: Alignment.topRight,
-                                    child: IconButton(
-                                        icon: new Icon(Icons.delete, color: Colors.white,),
-                                        onPressed: () {
-                                         imageSelectorController.deleteImage();
-                                        }),
-                                  )
+                            ? Align(
+                                alignment: Alignment.topRight,
+                                child: IconButton(
+                                    icon: new Icon(
+                                      Icons.delete,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      imageSelectorController.deleteImage();
+                                    }),
+                              )
                             : Column(
                                 children: [
-                                
                                   SizedBox(
                                     height: Get.height * 0.1,
                                   ),
@@ -93,28 +96,34 @@ class ImageSelectorView extends GetView {
                     ]),
               ),
               SizedBox(
-                height:50,
+                height: 50,
               ),
               GetBuilder<ImageSelectorController>(
-                  builder: (controller) => imageSelectorController.imageList.length > 0
+                  builder: (controller) => imageSelectorController
+                              .imageList.length >
+                          0
                       ? Padding(
-                    padding: const EdgeInsets.fromLTRB(2.0,0.0,5.0,2),
-                    child: Center(
-                      child: Container(
-                        height: 20,
-
-
-                        child:imageSelectorController.imageList.length == 5? Text("5 photos are stored now zip to continue the process."): Text(
-                          "Take ${(5-imageSelectorController.imageList.length)} more photos",
-                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
-                        ),
-
-                      ),
-                    ),
-                  )
+                          padding: const EdgeInsets.fromLTRB(2.0, 0.0, 5.0, 2),
+                          child: Center(
+                            child: Container(
+                              height: 20,
+                              child: imageSelectorController.imageList.length ==
+                                      5
+                                  ? Text(
+                                      "5 photos are stored now zip to continue the process.")
+                                  : Text(
+                                      "Take ${(5 - imageSelectorController.imageList.length)} more photos",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    ),
+                            ),
+                          ),
+                        )
                       : SizedBox()),
               GetBuilder<ImageSelectorController>(
-                  builder: (controller) => imageSelectorController.image != null && imageSelectorController.isPressed
+                  builder: (controller) => imageSelectorController.image != null
                       ? Padding(
                           padding: const EdgeInsets.all(20.0),
                           child: Center(
@@ -123,36 +132,40 @@ class ImageSelectorView extends GetView {
                               minWidth: Get.width * 0.5,
                               color: Colors.blue,
                               child: Text(
-                                "Add to list",
+                                "Upload Image",
                                 style: TextStyle(color: Colors.white),
                               ),
                               onPressed: () {
-                                imageSelectorController.addImageToList();
+                                imageSelectorController
+                                    .mapPrescriptionPressed();
                               },
                             ),
                           ),
                         )
                       : SizedBox()),
               GetBuilder<ImageSelectorController>(
-                  builder: (controller) => imageSelectorController.imageList.length == 5
-                      ? Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Center(
-                      child: MaterialButton(
-                        height: Get.height * 0.06,
-                        minWidth: Get.width * 0.5,
-                        color: Colors.blue,
-                        child: Text(
-                          "Zip Images",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () {
-                          zipControllerController.test(imageList: imageSelectorController.imageList);
-                        },
-                      ),
-                    ),
-                  )
-                      : SizedBox())
+                  builder: (controller) =>
+                      imageSelectorController.imageList.length == 5
+                          ? Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Center(
+                                child: MaterialButton(
+                                  height: Get.height * 0.06,
+                                  minWidth: Get.width * 0.5,
+                                  color: Colors.blue,
+                                  child: Text(
+                                    "Zip Images",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  onPressed: () {
+                                    zipControllerController.test(
+                                        imageList:
+                                            imageSelectorController.imageList);
+                                  },
+                                ),
+                              ),
+                            )
+                          : SizedBox())
             ],
           ),
         ),
@@ -259,7 +272,7 @@ class ImageSelectorView extends GetView {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: SingleChildScrollView(
-                              child: Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
@@ -279,8 +292,8 @@ class ImageSelectorView extends GetView {
                     SizedBox(
                       height: 10,
                     ),
-                    instructions('Step 4: Press save button to save the records.'),
-                   
+                    instructions(
+                        'Step 4: Press save button to save the records.'),
                   ],
                 ),
               ),

@@ -39,6 +39,7 @@ dependencies:
   http:
   shared_preferences: ^2.0.6
   flutter_archive: ^4.0.1
+  dio: ^ 3.0.10
 
 dev_dependencies:
   flutter_test:
