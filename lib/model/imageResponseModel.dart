@@ -16,21 +16,20 @@ class ImageResponse {
     this.students,
   });
 
-  DateTime date;
-  String imageResponseClass;
+  double date;
+  int imageResponseClass;
   List<Student> students;
 
   factory ImageResponse.fromJson(Map<String, dynamic> json) => ImageResponse(
-        date: DateTime.parse(json["date"]),
-        imageResponseClass: json["class"],
+        date: json["date"].toDouble(),
+        imageResponseClass: json["Class"],
         students: List<Student>.from(
             json["students"].map((x) => Student.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "date":
-            "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
-        "class": imageResponseClass,
+        "date": date,
+        "Class": imageResponseClass,
         "students": List<dynamic>.from(students.map((x) => x.toJson())),
       };
 }

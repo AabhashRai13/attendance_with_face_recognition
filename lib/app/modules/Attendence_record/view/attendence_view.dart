@@ -1,15 +1,19 @@
 import 'package:attendance_project/data/users.dart';
+import 'package:attendance_project/model/imageResponseModel.dart';
 import 'package:attendance_project/model/user.dart';
 import 'package:attendance_project/widgets/scrollable_widget.dart';
 import 'package:flutter/material.dart';
 
 class AttendanceRecordView extends StatefulWidget {
+  final List<Student> users;
+
+  AttendanceRecordView({this.users});
   @override
   _AttendanceRecordView createState() => _AttendanceRecordView();
 }
 
 class _AttendanceRecordView extends State<AttendanceRecordView> {
-  List<User> users;
+  // List<User> users;
   int sortColumnIndex;
   bool isAscending = false;
 
@@ -17,15 +21,15 @@ class _AttendanceRecordView extends State<AttendanceRecordView> {
   void initState() {
     super.initState();
 
-    this.users = List.of(allUsers);
+    //   this.users = List.of(allUsers);
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: new AppBar(
-            title: Text("Student Attendance Record"),
+          title: Text("Student Attendance Record"),
         ),
-        body:  ScrollableWidget(child: buildDataTable()),
+        body: ScrollableWidget(child: buildDataTable()),
       );
 
   Widget buildDataTable() {
@@ -35,7 +39,7 @@ class _AttendanceRecordView extends State<AttendanceRecordView> {
       sortAscending: isAscending,
       sortColumnIndex: sortColumnIndex,
       columns: getColumns(columns),
-      rows: getRows(users),
+      rows: getRows(widget.users),
     );
   }
 
@@ -46,38 +50,41 @@ class _AttendanceRecordView extends State<AttendanceRecordView> {
           ))
       .toList();
 
-  List<DataRow> getRows(List<User> users) => users.map((User user) {
-        final cells = [user.firstName, user.rollNo, user.status];
+  List<DataRow> getRows(List<Student> users) => users.map((Student user) {
+        final cells = [user.name, user.rollNo, user.status];
 
         return DataRow(cells: getCells(cells));
       }).toList();
 
   List<DataCell> getCells(List<dynamic> cells) {
-    return cells.map((dynamic data) => DataCell(Text('$data', style: TextStyle(color: checkAttendanceStatus(data.toString())),),)).toList();
+    return cells
+        .map((dynamic data) => DataCell(
+              Text(
+                '$data',
+                style: TextStyle(color: checkAttendanceStatus(data.toString())),
+              ),
+            ))
+        .toList();
   }
-  
-  Color checkAttendanceStatus(String attendanceStatus){
-    if(attendanceStatus == "Present"){
+
+  Color checkAttendanceStatus(String attendanceStatus) {
+    if (attendanceStatus == "Present") {
       return Colors.green;
-    }
-    else if(
-    attendanceStatus == "Absent"
-    ){
+    } else if (attendanceStatus == "Absent") {
       return Colors.red;
-    }
-    else
+    } else
       return Colors.black;
   }
 
   void onSort(int columnIndex, bool ascending) {
     if (columnIndex == 0) {
-      users.sort((user1, user2) =>
-          compareString(ascending, user1.firstName, user2.firstName));
+      widget.users.sort(
+          (user1, user2) => compareString(ascending, user1.name, user2.name));
     } else if (columnIndex == 1) {
-      users.sort((user1, user2) =>
-          compareString(ascending, user1.rollNo.toString(), user2.rollNo.toString()));
+      widget.users.sort((user1, user2) => compareString(
+          ascending, user1.rollNo.toString(), user2.rollNo.toString()));
     } else if (columnIndex == 2) {
-      users.sort((user1, user2) =>
+      widget.users.sort((user1, user2) =>
           compareString(ascending, '${user1.status}', '${user2.status}'));
     }
 
